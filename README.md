@@ -1,102 +1,34 @@
-# OTT Streaming Content Trend Analysis 📺
+# OTT Streaming Content Trend Analysis
 
-## 📌 Project Overview
+## Deliverables
+- `notebooks/ott_content_trend_eda.ipynb` — end-to-end EDA with 8 visualizations, cleaning, feature engineering, SQL exports and auto-generated memo.
+- `sql/ott_analysis_queries.sql` — SQLite-compatible schema and 12 core analytical queries.
+- `reports/content_strategy_memo_template.md` — concise memo framework. The notebook generates a measured memo at `reports/content_strategy_memo.md`.
+- `requirements.txt` — Python dependencies.
 
-This project explores the Netflix streaming content catalog to identify patterns and trends in genre popularity, content ratings, release years, regional distribution, and content duration.
+## Dataset
+Netflix Movies and TV Shows catalog snapshot from TidyTuesday (2021-04-20):
+https://github.com/rfordatascience/tidytuesday/blob/main/data/2021/2021-04-20/readme.md
 
-The objective is to transform raw catalog data into meaningful business insights that can help streaming platforms make better content acquisition and strategy decisions.
+Raw CSV:
+https://raw.githubusercontent.com/rfordatascience/tidytuesday/main/data/2021/2021-04-20/netflix_titles.csv
 
-## 🎯 Project Objectives
+The notebook downloads the CSV on first run. It retains missing descriptive values as `Unknown`, removes duplicate `show_id` values, parses dates and duration, and creates normalized genre and country bridge tables.
 
-- Analyze popular content genres.
-- Understand the distribution of Movies and TV Shows.
-- Explore content ratings and classifications.
-- Identify release-year and content addition trends.
-- Analyze regional content distribution.
-- Study movie runtime patterns.
-- Develop actionable content strategy recommendations.
-
-## 🛠️ Tools & Technologies
-
-- **Python**
-- **Pandas** – Data cleaning and manipulation
-- **Matplotlib** – Data visualization
-- **Seaborn** – Statistical visualization
-- **SQL** – Data aggregation and analysis
-- **Excel** – Data exploration
-
-## 📊 Key Analysis
-
-1. Content distribution by type (Movies vs TV Shows).
-2. Top 15 popular genres.
-3. Content rating distribution.
-4. Content release trends by year.
-5. Netflix content addition trends.
-6. Regional content distribution.
-7. Movie runtime analysis.
-8. Genre distribution by content type.
-
-## 📁 Project Structure
-
-```text
-OTT-Streaming-Content-Trend-Analysis/
-│
-├── data/
-│   ├── netflix_titles_clean.csv
-│   ├── title_genres.csv
-│   └── title_countries.csv
-│
-├── notebooks/
-│   └── ott_content_trend_eda.ipynb
-│
-├── sql/
-│   └── ott_analysis_queries.sql
-│
-├── reports/
-│   └── content_strategy_memo_template.md
-│
-├── requirements.txt
-└── README.md
-```
-
-## 📂 Dataset
-
-**Source:** Netflix Movies and TV Shows Dataset (TidyTuesday, April 20, 2021).
-
-[View Dataset](https://github.com/rfordatascience/tidytuesday/tree/main/data/2021/2021-04-20)
-
-The dataset contains information about:
-- Title
-- Content type
-- Director
-- Cast
-- Country
-- Release year
-- Content rating
-- Duration
-- Genre
-- Date added
-
-## 🚀 How to Run This Project
-
-**Step 1: Clone the repository**
-
+## Run
 ```bash
-git clone YOUR_GITHUB_REPOSITORY_URL
-```
-
-**Step 2: Install dependencies**
-
-```bash
-pip install -r requirements.txt
-```
-
-**Step 3: Open Jupyter Notebook**
-
-```bash
+python -m pip install -r requirements.txt
 jupyter notebook
 ```
+Open `notebooks/ott_content_trend_eda.ipynb` and choose **Run All**. Internet is needed for the first download. The notebook saves cleaned CSVs to `data/` and generates the measured memo in `reports/`.
 
-**Step 4:** Open `notebooks/ott_content_trend_eda.ipynb` and run all cells.
+## SQL
+After running the notebook, import these files into SQLite:
+- `data/netflix_titles_clean.csv` → `titles`
+- `data/title_genres.csv` → `title_genres`
+- `data/title_countries.csv` → `title_countries`
 
-The notebook downloads the dataset on its first run and generates
+Then execute `sql/ott_analysis_queries.sql`. If using a SQLite GUI, use its CSV import wizard and preserve the table names above.
+
+## Interpretation guardrails
+This is a historical single-platform catalog snapshot, not a current catalog and not an engagement dataset. Counts show catalog supply, not demand. Multi-genre and multi-country titles count in every associated category. No valid cross-platform Netflix/Prime/Hotstar comparison is possible from this dataset alone.
